@@ -3,8 +3,12 @@ let glyphSize = 80;  //dimensione base del glifo
 let spacing = 250;    //distanza tra i glifi
 let marginTop = 150;  //margine superiore 
 let marginBottom = 50; //margine inferiore
-let marginLeft = 50;   //margine sinistro
-let marginRight = 50;  //margine destro
+let margin = 50;  // Imposta un valore comune per i margini sinistro e destro
+
+// Usa questa variabile per entrambi i margini
+let marginLeft = margin;  
+let marginRight = margin; 
+
 
 function preload() {
   // Carica il dataset dei fiumi
@@ -13,73 +17,80 @@ function preload() {
 }
 
 function setup() {
-  //imposta la canvas come responsiva
+  // Imposta il margine sinistro e destro uguali
+  let margin = 50;
+  let marginLeft = margin;
+  let marginRight = margin;
+
+  // Imposta la canvas come responsiva
   createCanvas(windowWidth, windowHeight);
   noLoop();
   noStroke();  
 
-  //calcola il numero di colonne e righe tenendo conto dei margini
-  let cols = floor((width - marginLeft - marginRight) / spacing);  //sottrae i margini dalla larghezza
-  let rows = ceil(rivers.getRowCount() / cols);  //calcola il numero di righe
+  // Calcola il numero di colonne e righe tenendo conto dei margini
+  let cols = floor((width - marginLeft - marginRight) / spacing);  // Sottrae i margini dalla larghezza
+  let rows = ceil(rivers.getRowCount() / cols);  // Calcola il numero di righe
   
-  //ridimensiona il canvas per includere i margini
+  // Ridimensiona la canvas per includere i margini
   resizeCanvas(cols * spacing + marginLeft + marginRight, rows * spacing + marginTop + marginBottom + 200);  // Aggiungi un po' di spazio extra per il testo
 
   background("white");
   
-  //disegna il titolo
+  // Disegna il titolo
   drawTitle();
-
-  //disegna la legenda
+  
+  // Disegna la legenda
   drawLegend();
   
-  //disegna il paragrafo
+  // Disegna il paragrafo
   drawParagraph();
   
-  //disegna i glifi per ogni fiume
+  // Disegna i glifi per ogni fiume
   for (let i = 0; i < rivers.getRowCount(); i++) {
-    let x = marginLeft + (i % cols) * spacing;  //aggiungi il margine sinistro
-    let y = marginTop + 300 + floor(i / cols) * spacing;  //aggiusta il margine per i glifi
+    let x = marginLeft + (i % cols) * spacing;  // Aggiungi il margine sinistro
+    let y = marginTop + 300 + floor(i / cols) * spacing;  // Aggiusta il margine per i glifi
     drawGlyph(x, y, rivers.getRow(i));
   }
 }
 
+
 function drawTitle() {
-  //imposta il titolo sopra a tutto
+  // Imposta il titolo allineato a sinistra
   fill(0);  
   textSize(32);  
-  textAlign(CENTER, CENTER);  //allinea il testo al centro
-  text("Temperatura dei Fiumi nel Mondo", width / 2, marginTop / 3);  //posiziona il titolo
+  textAlign(LEFT, CENTER);  // Allinea il testo a sinistra
+  text("Temperatura dei Fiumi nel Mondo", marginLeft, marginTop / 3);  // Posiziona il titolo a sinistra
 }
 
 function drawLegend() {
-  //imposta la legenda tra il titolo e il paragrafo
   fill(0);  
   textSize(16);  
-  textAlign(LEFT, TOP);  //allinea il testo a sinistra
+  textAlign(LEFT, TOP);  // Allinea il testo a sinistra e in alto
   
   let continentNames = ['Africa', 'Asia', 'Europe', 'North America', 'South America', 'Australia', 'Antarctica'];
   let continentColors = [
-    color(212, 236, 243),  //Africa
-    color(146, 188, 229),  //Asia
-    color(3, 128, 196),    //Europa
-    color(36, 64, 147),    //Nord America
-    color(106, 85, 159),   //Sud America
-    color(0, 119, 115),    //Australia
-    color(155, 205, 159)   //Antartide
+    color(212, 236, 243),  // Africa
+    color(146, 188, 229),  // Asia
+    color(3, 128, 196),    // Europa
+    color(36, 64, 147),    // Nord America
+    color(106, 85, 159),   // Sud America
+    color(0, 119, 115),    // Australia
+    color(155, 205, 159)   // Antartide
   ];
   
-  let legendY = marginTop + 40;  //posizione per la legenda
+  let legendY = marginTop + 40;  // Posizione verticale della legenda, subito sotto il titolo
   
-  //disegna ogni colore associandogli il nome continente
+  // Disegna ogni colore associandogli il nome continente
   for (let i = 0; i < continentNames.length; i++) {
     fill(continentColors[i]);
-    rect(marginLeft + 10, legendY + i * 30, 20, 20);  //rettangolo colorato
+    rect(marginLeft, legendY + i * 30, 20, 20);  // Rettangolo colorato
     
     fill(0);  
-    text(continentNames[i], marginLeft + 40, legendY + i * 30 + 10);  //posiziona il nome del continente accanto al rettangolo
+    text(continentNames[i], marginLeft + 30, legendY + i * 30 + 10);  // Posiziona il nome del continente accanto al rettangolo
   }
 }
+
+
 
 function drawParagraph() {
   //imposta il paragrafo accanto alla legenda
@@ -171,22 +182,26 @@ function drawGlyph(x, y, data) {
 }
 
 function windowResized() {
-  //quando la finestra viene ridimensionata, ridisegna la canvas
-  let cols = floor((width - marginLeft - marginRight) / spacing);  //considera i margini
-  let rows = ceil(rivers.getRowCount() / cols);  //calcola le righe
-  resizeCanvas(cols * spacing + marginLeft + marginRight, rows * spacing + marginTop + marginBottom + 200);  //ridimensiona la canvas
+  // Quando la finestra viene ridimensionata, ridisegna la canvas
+  let margin = 50;  // Usando il valore comune per i margini
+  let marginLeft = margin;
+  let marginRight = margin;
+
+  let cols = floor((width - marginLeft - marginRight) / spacing);  // Considera i margini
+  let rows = ceil(rivers.getRowCount() / cols);  // Calcola le righe
+  resizeCanvas(cols * spacing + marginLeft + marginRight, rows * spacing + marginTop + marginBottom + 200);  // Ridimensiona la canvas
   background(240);
   
-  //ridisegna il titolo
+  // Ridisegna il titolo
   drawTitle();
   
-  //ridisegna la legenda
+  // Ridisegna la legenda
   drawLegend();
   
-  //ridisegna il paragrafo
+  // Ridisegna il paragrafo
   drawParagraph();
   
-  //ridisegna tutti i glifi
+  // Ridisegna tutti i glifi
   for (let i = 0; i < rivers.getRowCount(); i++) {
     let x = marginLeft + (i % cols) * spacing;
     let y = marginTop + 120 + floor(i / cols) * spacing;
